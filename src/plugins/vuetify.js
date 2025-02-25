@@ -5,6 +5,7 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import en from '../lang/en';
 import de from '../lang/de';
+import zhCN from '../lang/zhCN';
 import { checkLocal, decodeFile } from '../js/savefile';
 import themes from '../js/theme/themes';
 
@@ -31,7 +32,7 @@ export default new Vuetify({
         }
     },
     lang: {
-        locales: { en, de },
-        current: "en"
+        locales: { en, de, zhCN },
+        current: "zh"
     }
 });

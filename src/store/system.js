@@ -163,9 +163,9 @@ export default {
                         unlock: null,
                         hasDescription: false,
                         type: 'select',
-                        items: ['en', 'de'],
-                        value: 'en',
-                        defaultValue: 'en'
+                        items: ['en', 'de' , 'zhCN'],
+                        value: 'zhCN',
+                        defaultValue: 'zhCNs'
                     },
                     tabDisplayDesktop: {
                         unlock: null,

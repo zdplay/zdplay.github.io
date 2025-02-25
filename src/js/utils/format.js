@@ -84,6 +84,9 @@ function formatInt(num) {
         case 'de':
             locale = 'de-DE';
             break;
+        case 'zhCN':
+            locale = 'zh-CN';
+            break;
     }
     return num.toLocaleString(locale);
 }
