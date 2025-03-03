@@ -97,10 +97,10 @@ const loadLatestFileData = async () => {
         }
 
         const res = await getLatestData(userId, tokenId);
-        console.log('saveFileData res:', res);
-        if (res) {
+        console.log('saveFileData res:', res.save_data);
+        if (res.save_data) {
             cleanStore();
-            loadGame(res);
+            loadGame(res.save_data);
             store.commit('system/addNotification', { color: 'success', timeout: 2000, message: { type: 'load', name: 'cloud' } });
         } else {
             store.commit('system/addNotification', { color: 'warning', timeout: 5000, message: { type: 'load', name: 'cloud', error: '没有找到云端存档' } });
@@ -120,8 +120,8 @@ const getCloudSaveFileList = async () => {
             store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser 或 cloudpwd 设置错误' } });
             return null;
         }
-
         const saveFiles = await getLatestDataList(userId, tokenId, 5);
+        console.log('saveFileData res:', saveFiles);
         return saveFiles;
     } catch (error) {
         store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error } });
@@ -141,10 +141,10 @@ const loadSelectedFileData = async (selectedSavefile) => {
         }
 
         const res = await loadSaveFile(selectedSavefile, userId, tokenId);
-
-        if (res) {
+        console.log('saveFileData res:', res.save_data);
+        if (res.save_data) {
             cleanStore();
-            loadGame(res);
+            loadGame(res.save_data);
             store.commit('system/addNotification', { color: 'success', timeout: 2000, message: { type: 'load', name: 'cloud' } });
         } else {
             store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: '加载选定存档失败' } });

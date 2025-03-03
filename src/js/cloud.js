@@ -58,7 +58,7 @@ export async function getLatestData(userId, tokenId) {
         });
 
         if (response.save_data) {
-            return response.save_data;
+            return response;
         } else {
             return null;
         }

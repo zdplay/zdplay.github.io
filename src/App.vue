@@ -316,6 +316,22 @@
               radial-gradient(circle at 100% 0%, #B0D8FF, #B0D8FF 30%, transparent 30%),
               linear-gradient(#80C0FF, #80C0FF);
   animation: prismatic-navbar 20s linear infinite;
+  .v-dialog {
+  background-color: var(--v-background-base); 
+}
+
+/* 标题颜色 */
+.headline {
+  color: var(--v-primary-base); 
+}
+
+/* 列表项选中时的样式 */
+.selected-primary {
+  box-shadow: 3px 3px 0 var(--v-primary-base), -3px 3px 0 var(--v-primary-base), 3px -3px 0 var(--v-primary-base), -3px -3px 0 var(--v-primary-base);
+}
+.v-btn {
+  color: var(--v-primary-base);
+}
 }
 </style>
 
@@ -422,22 +438,22 @@
           </v-list-item>
           <label for="gooboo-savefile-input">
             <v-list-item class="v-list-item--link" role="menuitem">
-              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveImport') }}</v-list-item-title>
+              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveExport') }}</v-list-item-title>
             </v-list-item>
           </label>
           <v-list-item @click="CloudSave">
             <v-list-item-title>
-              <span>【云储存】</span>
+              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.cloudsave') }}</v-list-item-title>
             </v-list-item-title>
           </v-list-item>
           <v-list-item @click="CloudLoadLatest">
             <v-list-item-title>
-              <span>【云加载】</span>
+              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.cloudloadlatest') }}</v-list-item-title>
             </v-list-item-title>
           </v-list-item>
           <v-list-item @click="CloudLoadList">
             <v-list-item-title>
-              <span>【云存档列表】</span>
+              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.cloudloadlist') }}</v-list-item-title>
             </v-list-item-title>
           </v-list-item>
           <v-list-item @click="changeScreen('resetProgress')">
@@ -493,12 +509,33 @@
     <particle-spawner></particle-spawner>
     <current-note></current-note>
     <current-confirm></current-confirm>
-    <v-dialog v-model="dialogDust" max-width="400">
-      <golden-dust-menu @cancel="dialogDust = false"></golden-dust-menu>
+    <v-dialog v-model="dialogSaveList" max-width="500">  <!-- 使用 max-width 限制最大宽度 -->
+      <v-card class="default-card">  <!-- 应用 default-card 样式 -->
+        <v-card-title class="headline">选择云存档</v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item
+              v-for="file in saveFiles"
+              :key="file"
+              @click="selectedSavefile = file"
+              :class="{'selected-primary': selectedSavefile === file}"
+            >
+              <v-list-item-title>{{ file }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-grey darken-1" text @click="dialogSaveList = false">
+            取消
+          </v-btn>
+          <v-btn color="primary" text @click="confirmLoadSavefile">
+            确认
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
-    <input @change="importSave" type="file" accept="text/plain, application/json" id="gooboo-savefile-input" style="display: none;"/>
-    <v-icon v-if="activeTutorialCss !== null" class="tutorial-arrow" :style="activeTutorialCss">mdi-arrow-up-bold</v-icon>
-  </v-app>
+</v-app>
 </template>
 
 <script>
@@ -599,7 +636,10 @@ export default {
   },
   data: () => ({
     dialogDust: false,
-    intervalId: null
+    dialogSaveList: false,
+    saveFiles: [],
+    selectedSavefile: null,
+    intervalId: null,
   }),
   computed: {
     ...mapState({
@@ -740,12 +780,20 @@ export default {
     CloudLoadLatest(){
       loadLatestFileData()
     },
-    CloudLoadList(){
-      getCloudSaveFileList()
+    async CloudLoadList() {
+      try {
+        this.saveFiles = await getCloudSaveFileList();
+        this.dialogSaveList = true;
+      } catch (error) {
+        console.error("获取云存档列表失败:", error);
+      }
     },
-    CloudLoadListFile(){
-      loadSelectedFileData()
-    },    
+    confirmLoadSavefile() {
+      if (this.selectedSavefile) {
+        loadSelectedFileData(this.selectedSavefile);
+        this.dialogSaveList = false;
+      }
+    },  
     changeScreen(name, finishTutorial = false) {
       this.$store.commit('system/updateKey', {key: 'screen', value: name});
       if (finishTutorial) {
