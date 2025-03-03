@@ -438,7 +438,7 @@
           </v-list-item>
           <label for="gooboo-savefile-input">
             <v-list-item class="v-list-item--link" role="menuitem">
-              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveExport') }}</v-list-item-title>
+              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveImport') }}</v-list-item-title>
             </v-list-item>
           </label>
           <v-list-item @click="CloudSave">
