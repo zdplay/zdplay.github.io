@@ -535,6 +535,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <input @change="importSave" type="file" accept="text/plain, application/json" id="gooboo-savefile-input" style="display: none;"/>
+    <v-icon v-if="activeTutorialCss !== null" class="tutorial-arrow" :style="activeTutorialCss">mdi-arrow-up-bold</v-icon>
 </v-app>
 </template>
 
