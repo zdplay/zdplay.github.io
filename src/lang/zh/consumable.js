@@ -1,40 +1,40 @@
 export default {
-  owned: '已拥有',
+  owned: '拥有',
 
   gem_prestigeStone: {
-    name: '重置石',
-    description: '获得等同于您最佳循环次数的重置货币'
+    name: '声望石',
+    description: '获得与您的最佳周期相等的声望货币'
   },
   mining_goldenHammer: {
-    name: '黄金锤子',
-    description: '获得此次制作中可能的最佳镐子'
+    name: '金锤',
+    description: '为这门手艺找到最好的镐'
   },
   village_ingredientBox: {
-    name: '原料盒',
-    description: '包含只能在这些盒子中找到的特殊原料'
+    name: '配料箱',
+    description: '含有只有在这些盒子里才能找到的特殊成分'
   },
   horde_manaPotion: {
-    name: '魔法药水',
-    description: '恢复您最大魔法值的 50%'
+    name: '法力药水',
+    description: '补充50%的最大法力值'
   },
   farm_basic: {
     name: '基础肥料',
     description: ''
   },
   farm_flower: {
-    name: '花卉肥料',
+    name: '花肥',
     description: ''
   },
   farm_speedGrow: {
-    name: '速生剂',
+    name: '快速生长',
     description: ''
   },
   farm_richSoil: {
-    name: '肥沃土壤',
+    name: '肥沃的土壤',
     description: ''
   },
   farm_shiny: {
-    name: '光泽肥料',
+    name: '闪亮肥料',
     description: ''
   },
   farm_juicy: {
@@ -58,11 +58,11 @@ export default {
     description: ''
   },
   farm_turboGrow: {
-    name: '极速生长剂',
+    name: '涡轮生长',
     description: ''
   },
   farm_premium: {
-    name: '高级肥料',
+    name: '优质肥料',
     description: ''
   },
   farm_analyzing: {
@@ -70,19 +70,19 @@ export default {
     description: ''
   },
   farm_superJuicy: {
-    name: '超级多汁剂',
+    name: '超级多汁',
     description: ''
   },
   farm_pellets: {
-    name: '颗粒肥料',
+    name: '颗粒',
     description: ''
   },
   farm_sunshine: {
-    name: '阳光精华',
+    name: '阳光',
     description: ''
   },
   farm_superFlower: {
-    name: '超级花卉养料',
+    name: '超级鲜花',
     description: ''
   },
   farm_smellyMud: {
@@ -94,7 +94,7 @@ export default {
     description: ''
   },
   farm_fieldBlessing: {
-    name: '农田祝福',
+    name: '田野祝福',
     description: ''
   },
   farm_cinnamonBag: {
