@@ -14,6 +14,8 @@ import treasure from "./modules/treasure";
 import general from "./modules/general";
 import event from "./modules/event";
 import cryolab from "./modules/cryolab";
+import { saveData, getLatestDataList, getLatestData, loadSaveFile } from "./cloud"
+import {loadGame} from "@/js/init";
 import v1_1_0 from "./modules/migration/v1_1_0";
 import { getDay } from "./utils/date";
 import v1_1_2 from "./modules/migration/v1_1_2";
@@ -45,7 +47,7 @@ const migrations = {
     '1.5.6': v1_5_6,
 };
 
-export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
+export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile, saveFileData, loadLatestFileData, getCloudSaveFileList, loadSelectedFileData }
 const semverCompare = require('semver/functions/compare');
 
 /**
@@ -60,6 +62,97 @@ function checkLocal() {
 function saveLocal() {
     localStorage.setItem(LOCAL_STORAGE_NAME, getSavefile());
 }
+
+const saveFileData = async () => {
+    try {
+        let userId = store.state.system.settings.general.items.clouduser.value;
+        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!userId || !tokenId) {
+            console.error("clouduser 或 cloudpwd 设置错误");
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: "clouduser 或 cloudpwd 设置错误" } });
+            return; 
+        }
+        
+        const goobooSavefile = localStorage.getItem('goobooSavefile');
+        if (!goobooSavefile) return;
+
+        const res = await saveData(goobooSavefile, userId, tokenId); 
+        if (res.message === "Save data saved successfully."){
+            store.commit('system/addNotification', { color: 'info', timeout: 2000, message: { type: 'save', name: 'auto' } });
+        }
+    } catch (error) {
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: error } });
+    }
+};
+
+const loadLatestFileData = async () => {
+    try {
+        let userId = store.state.system.settings.general.items.clouduser.value;
+        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!userId || !tokenId) {
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser 或 cloudpwd 设置错误' } });
+            return;
+        }
+
+        const res = await getLatestData(userId, tokenId);
+        console.log('saveFileData res:', res);
+        if (res) {
+            cleanStore();
+            loadGame(res);
+            store.commit('system/addNotification', { color: 'success', timeout: 2000, message: { type: 'load', name: 'cloud' } });
+        } else {
+            store.commit('system/addNotification', { color: 'warning', timeout: 5000, message: { type: 'load', name: 'cloud', error: '没有找到云端存档' } });
+        }
+    } catch (error) {
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error } });
+    }
+};
+
+// 获取云端存档列表
+const getCloudSaveFileList = async () => {
+    try {
+        let userId = store.state.system.settings.general.items.clouduser.value;
+        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!userId || !tokenId) {
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser 或 cloudpwd 设置错误' } });
+            return null;
+        }
+
+        const saveFiles = await getLatestDataList(userId, tokenId, 5);
+        return saveFiles;
+    } catch (error) {
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error } });
+        return null;
+    }
+};
+
+// 从云端加载选定的存档
+const loadSelectedFileData = async (selectedSavefile) => {
+    try {
+        let userId = store.state.system.settings.general.items.clouduser.value;
+        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!userId || !tokenId) {
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser 或 cloudpwd 设置错误' } });
+            return;
+        }
+
+        const res = await loadSaveFile(selectedSavefile, userId, tokenId);
+
+        if (res) {
+            cleanStore();
+            loadGame(res);
+            store.commit('system/addNotification', { color: 'success', timeout: 2000, message: { type: 'load', name: 'cloud' } });
+        } else {
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: '加载选定存档失败' } });
+        }
+    } catch (error) {
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error } });
+    }
+};
 
 function cleanStore() {
     Object.keys(store._modules.root._children).forEach(module => {

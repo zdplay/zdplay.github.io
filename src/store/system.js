@@ -159,6 +159,20 @@ export default {
                         defaultValue: 30,
                         clearable: true
                     },
+                    clouduser: {
+                        unlock: null,
+                        hasDescription: true,
+                        type: 'text',
+                        value: '',
+                        defaultValue: '',
+                      },
+                    cloudpwd: {
+                        unlock: null,
+                        hasDescription: true,
+                        type: 'text', 
+                        value: '', 
+                        defaultValue: ''
+                    },
                     lang: {
                         unlock: null,
                         hasDescription: false,
@@ -198,7 +212,7 @@ export default {
                         type: 'switch',
                         value: false,
                         defaultValue: false
-                    },
+                    }
                 }
             },
             automation: {

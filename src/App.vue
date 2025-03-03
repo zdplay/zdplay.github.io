@@ -425,6 +425,21 @@
               <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveImport') }}</v-list-item-title>
             </v-list-item>
           </label>
+          <v-list-item @click="CloudSave">
+            <v-list-item-title>
+              <span>【云储存】</span>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="CloudLoadLatest">
+            <v-list-item-title>
+              <span>【云加载】</span>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="CloudLoadList">
+            <v-list-item-title>
+              <span>【云存档列表】</span>
+            </v-list-item-title>
+          </v-list-item>
           <v-list-item @click="changeScreen('resetProgress')">
             <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.resetProgress') }}</v-list-item-title>
           </v-list-item>
@@ -513,7 +528,7 @@ import General from './components/view/General.vue';
 import Event from './components/view/Event.vue';
 import Treasure from './components/view/Treasure.vue';
 import Cryolab from './components/view/Cryolab.vue';
-import { cleanStore, decodeFile, exportFile, saveLocal } from './js/savefile';
+import { cleanStore, decodeFile, exportFile, saveLocal, saveFileData, loadLatestFileData, getCloudSaveFileList, loadSelectedFileData } from './js/savefile';
 import NextTile from './components/partial/main/NextTile.vue';
 import VSnackbars from 'v-snackbars'
 import AchievementMessage from './components/partial/snackbar/AchievementMessage.vue';
@@ -719,6 +734,18 @@ export default {
         }
       }
     },
+    CloudSave(){
+      saveFileData()
+    },
+    CloudLoadLatest(){
+      loadLatestFileData()
+    },
+    CloudLoadList(){
+      getCloudSaveFileList()
+    },
+    CloudLoadListFile(){
+      loadSelectedFileData()
+    },    
     changeScreen(name, finishTutorial = false) {
       this.$store.commit('system/updateKey', {key: 'screen', value: name});
       if (finishTutorial) {
