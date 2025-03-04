@@ -82,7 +82,7 @@ const saveFileData = async () => {
             store.commit('system/addNotification', { color: 'info', timeout: 2000, message: { type: 'save', name: 'auto' } });
         }
     } catch (error) {
-        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: error } });
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: error.data } });
     }
 };
 
@@ -106,11 +106,11 @@ const loadLatestFileData = async () => {
             store.commit('system/addNotification', { color: 'warning', timeout: 5000, message: { type: 'load', name: 'cloud', error: '没有找到云端存档' } });
         }
     } catch (error) {
-        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error } });
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error.data.message
+        } });
     }
 };
 
-// 获取云端存档列表
 const getCloudSaveFileList = async () => {
     try {
         let userId = store.state.system.settings.general.items.clouduser.value;
@@ -124,12 +124,11 @@ const getCloudSaveFileList = async () => {
         console.log('saveFileData res:', saveFiles);
         return saveFiles;
     } catch (error) {
-        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error } });
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error.data.message } });
         return null;
     }
 };
 
-// 从云端加载选定的存档
 const loadSelectedFileData = async (selectedSavefile) => {
     try {
         let userId = store.state.system.settings.general.items.clouduser.value;
@@ -150,7 +149,7 @@ const loadSelectedFileData = async (selectedSavefile) => {
             store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: '加载选定存档失败' } });
         }
     } catch (error) {
-        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error } });
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error.data.message } });
     }
 };
 

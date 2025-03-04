@@ -1165,6 +1165,9 @@ export default {
         name: 'Old farm selection',
         description: 'Uses the old menu to select crops and buildings in the farm'
       },
+      cloudautosaveTimer: {
+        name: 'Cloud Autosave'
+      },
       clouduser: {
         name: 'Cloud Username',
         description: 'Please remember, recovery is not provided.'

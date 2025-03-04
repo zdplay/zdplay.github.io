@@ -173,6 +173,18 @@ export default {
                         value: '', 
                         defaultValue: ''
                     },
+                    cloudautosaveTimer: {
+                        unlock: null,
+                        hasDescription: false,
+                        type: 'number',
+                        min: 300,
+                        max: 604800,
+                        step: 50,
+                        suffix: 's',
+                        value: '',
+                        defaultValue: '',
+                        clearable: true
+                    },
                     lang: {
                         unlock: null,
                         hasDescription: false,
@@ -409,6 +421,7 @@ export default {
         },
         keybindCurrent: null,
         autosaveTimer: null,
+        cloudautosaveTimer: null,
         backupTimer: 0,
         autoplayData: [],
         autoplayChoice: {},
@@ -626,6 +639,10 @@ export default {
             const timer = state.settings.general.items.autosaveTimer.value;
             Vue.set(state, 'autosaveTimer', timer !== null ? parseInt(timer) : timer);
         },
+        resetcloudAutosaveTimer(state) {
+            const timer = state.settings.general.items.cloudautosaveTimer.value;
+            Vue.set(state, 'cloudautosaveTimer', timer !== null ? parseInt(timer) : timer);
+        },
         addAutoplayData(state, data) {
             state.autoplayData.push(data);
         },
@@ -673,6 +690,7 @@ export default {
             commit('updateKey', {key: 'notification', value: []});
             commit('updateKey', {key: 'keybindCurrent', value: null});
             commit('updateKey', {key: 'autosaveTimer', value: null});
+            commit('updateKey', {key: 'cloudautosaveTimer', value: null});
             commit('updateKey', {key: 'backupTimer', value: 0});
             commit('updateKey', {key: 'autoplayData', value: []});
             commit('updateKey', {key: 'autoplayChoice', value: {}});
@@ -876,6 +894,9 @@ export default {
             commit('updateSetting', o);
             if (o.category === 'general' && o.name === 'autosaveTimer') {
                 commit('resetAutosaveTimer');
+            }
+            if (o.category === 'general' && o.name === 'cloudautosaveTimer') {
+                commit('resetcloudAutosaveTimer');
             }
             if (o.category === 'general' && o.name === 'lang') {
                 commit('mult/clearCache', null, {root: true});

@@ -443,7 +443,7 @@
           </label>
           <v-list-item @click="CloudSave">
             <v-list-item-title>
-              <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.cloudsave') }}</v-list-item-title>
+              <span>{{ $vuetify.lang.t('$vuetify.gooboo.cloudsave') + (cloudautosaveTimer !== null ? (' (' + $formatTime(cloudautosaveTimer) + ')') : '') }}</span>
             </v-list-item-title>
           </v-list-item>
           <v-list-item @click="CloudLoadLatest">
@@ -650,6 +650,7 @@ export default {
       dark: state => state.system.settings.general.items.dark.value,
       lang: state => state.system.settings.general.items.lang.value,
       autosaveTimer: state => state.system.autosaveTimer,
+      cloudautosaveTimer: state => state.system.cloudautosaveTimer,
       currentTheme: state => state.system.theme,
       snackbarPosition: state => state.system.settings.notification.items.position.value,
       cssShadows: state => state.system.settings.performance.items.cssShadows.value,
@@ -778,6 +779,7 @@ export default {
     },
     CloudSave(){
       saveFileData()
+      this.$store.commit('system/resetcloudAutosaveTimer');
     },
     CloudLoadLatest(){
       loadLatestFileData()

@@ -1165,6 +1165,9 @@ export default {
         name: 'Alte Bauernhofauswahl',
         description: 'Nutzt das alte Menü um Pflanzen und Gebäude im Bauernhof auszuwählen'
       },
+      cloudautosaveTimer: {
+        name: 'Cloud-Autospeicherung'
+      },
       clouduser: {
         name: 'Cloud-Benutzername',
         description: 'Bitte beachten Sie, dass keine Wiederherstellung angeboten wird.'

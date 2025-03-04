@@ -19,9 +19,18 @@ instance.interceptors.response.use(
         return response.data;
     },
     (error) => {
-        return Promise.reject(error);
+
+        if (error.response) {
+            return Promise.reject({
+                ...error,
+                data: error.response.data
+            });
+        } else {
+            return Promise.reject(error);
+        }
     }
 );
+
 
 export function loadSaveFile(savefile, userId, tokenId) {
     const gameId = window.location.hostname;

@@ -1165,6 +1165,9 @@ export default {
         name: '旧农场选择',
         description: '使用旧菜单选择农场中的作物和建筑'
       },
+      cloudautosaveTimer: {
+        name: '云端自动保存'
+      },
       clouduser: {
         name: '云端用户名',
         description: '请谨记，不提供找回'

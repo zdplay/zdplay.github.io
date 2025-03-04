@@ -9,7 +9,7 @@ import school from "./modules/school";
 import cryolab from "./modules/cryolab";
 import achievement from "./modules/achievement";
 import store from "../store";
-import { saveLocal } from "./savefile";
+import { saveLocal, saveFileData } from "./savefile";
 import general from "./modules/general";
 import event from "./modules/event";
 import { getDay } from "./utils/date";
@@ -58,6 +58,27 @@ function advance() {
                             }});
                         }
                     } else {
+                        store.commit('system/addNotification', {color: 'error', timeout: 5000, message: {
+                            type: 'save',
+                            name: 'auto',
+                            error: saveError
+                        }});
+                    }
+                }
+            }
+            if (store.state.system.settings.general.items.cloudautosaveTimer.value !== null && store.state.system.cloudautosaveTimer !== null && !['offlineSummary', 'tab-duplicate'].includes(store.state.system.screen)) {
+                let newTimer = store.state.system.cloudautosaveTimer - timeDiff;
+                if (newTimer > 0) {
+                    store.commit('system/updateKey', {key: 'cloudautosaveTimer', value: newTimer});
+                } else {
+                    store.commit('system/resetcloudAutosaveTimer');
+                    let saveError = null;
+                    try {
+                        saveFileData();
+                    } catch (error) {
+                        saveError = error;
+                    }
+                    if (saveError !== null) {
                         store.commit('system/addNotification', {color: 'error', timeout: 5000, message: {
                             type: 'save',
                             name: 'auto',
