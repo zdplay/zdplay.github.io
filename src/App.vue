@@ -509,31 +509,37 @@
     <particle-spawner></particle-spawner>
     <current-note></current-note>
     <current-confirm></current-confirm>
-    <v-dialog v-model="dialogSaveList" max-width="500">  <!-- 使用 max-width 限制最大宽度 -->
-      <v-card class="default-card">  <!-- 应用 default-card 样式 -->
-        <v-card-title class="headline">选择云存档</v-card-title>
+    <v-dialog v-model="dialogSaveList" max-width="500">
+      <v-card class="default-card" elevation="5" shaped>
+        <v-card-title primary-title class="title">选择云存档</v-card-title>
         <v-card-text>
-          <v-list>
+          <v-list rounded>
             <v-list-item
               v-for="file in saveFiles"
               :key="file"
               @click="selectedSavefile = file"
-              :class="{'selected-primary': selectedSavefile === file}"
+              ripple
+              :active="selectedSavefile === file"
+              active-class="primary--text"
             >
               <v-list-item-title>{{ file }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-card-text>
+        <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue-grey darken-1" text @click="dialogSaveList = false">
             取消
           </v-btn>
-          <v-btn color="primary" text @click="confirmLoadSavefile">
+          <v-btn color="primary" @click="confirmLoadSavefile">
             确认
           </v-btn>
         </v-card-actions>
       </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogDust" max-width="400">
+      <golden-dust-menu @cancel="dialogDust = false"></golden-dust-menu>
     </v-dialog>
     <input @change="importSave" type="file" accept="text/plain, application/json" id="gooboo-savefile-input" style="display: none;"/>
     <v-icon v-if="activeTutorialCss !== null" class="tutorial-arrow" :style="activeTutorialCss">mdi-arrow-up-bold</v-icon>
