@@ -8,6 +8,7 @@
     "settings": {
         "general": {
             "pause": true,
+            "cloudautosaveTimer": null,
             "autosaveTimer": null
         }
     },

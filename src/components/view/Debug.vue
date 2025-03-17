@@ -421,7 +421,8 @@ export default {
           general: {
             pause: true,
             dark: true,
-            autosaveTimer: null
+            autosaveTimer: null,
+            cloudautosaveTimer: null
           },
           notification: {
             note: false,

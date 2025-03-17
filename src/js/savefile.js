@@ -32,6 +32,8 @@ import v1_5_3 from "./modules/migration/v1_5_3";
 import v1_5_4 from "./modules/migration/v1_5_4";
 import v1_5_6 from "./modules/migration/v1_5_6";
 
+let isSaving = false;
+
 const migrations = {
     '1.1.0': v1_1_0,
     '1.1.2': v1_1_2,
@@ -64,6 +66,12 @@ function saveLocal() {
 }
 
 const saveFileData = async () => {
+    if (isSaving) {
+        console.log("正在上传存档，请稍候...");
+        return;
+    }
+    isSaving = true;
+
     try {
         let userId = store.state.system.settings.general.items.clouduser.value;
         let tokenId = store.state.system.settings.general.items.cloudpwd.value;
@@ -71,6 +79,7 @@ const saveFileData = async () => {
         if (!userId || !tokenId) {
             console.error("clouduser 或 cloudpwd 设置错误");
             store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: "clouduser 或 cloudpwd 设置错误" } });
+            isSaving = false;
             return; 
         }
         
@@ -83,7 +92,10 @@ const saveFileData = async () => {
         }
     } catch (error) {
         store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: error.data } });
+    } finally {
+        isSaving = false;
     }
+
 };
 
 const loadLatestFileData = async () => {

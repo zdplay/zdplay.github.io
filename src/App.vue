@@ -441,12 +441,12 @@
               <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveImport') }}</v-list-item-title>
             </v-list-item>
           </label>
-          <v-list-item @click="CloudSave">
+          <v-list-item @click="CloudSave" :disabled="isSaving">
             <v-list-item-title>
               <span>{{ $vuetify.lang.t('$vuetify.gooboo.cloudsave') + (cloudautosaveTimer !== null ? (' (' + $formatTime(cloudautosaveTimer) + ')') : '') }}</span>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item @click="CloudLoadLatest">
+          <v-list-item @click="showCloudLoadConfirm = true"> 
             <v-list-item-title>
               <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.cloudloadlatest') }}</v-list-item-title>
             </v-list-item-title>
@@ -540,6 +540,21 @@
     </v-dialog>
     <v-dialog v-model="dialogDust" max-width="400">
       <golden-dust-menu @cancel="dialogDust = false"></golden-dust-menu>
+    </v-dialog>
+    <v-dialog v-model="showCloudLoadConfirm" max-width="500">
+      <v-card class="default-card" elevation="5" shaped>
+        <v-card-title primary-title class="title">请确认是否下载最新云存档</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-grey darken-1" text @click="showCloudLoadConfirm = false">
+            取消
+          </v-btn>
+          <v-btn color="primary" @click="CloudLoadLatest">
+            确认
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
     <input @change="importSave" type="file" accept="text/plain, application/json" id="gooboo-savefile-input" style="display: none;"/>
     <v-icon v-if="activeTutorialCss !== null" class="tutorial-arrow" :style="activeTutorialCss">mdi-arrow-up-bold</v-icon>
@@ -648,6 +663,8 @@ export default {
     saveFiles: [],
     selectedSavefile: null,
     intervalId: null,
+    isSaving: false,
+    showCloudLoadConfirm: false,
   }),
   computed: {
     ...mapState({
@@ -783,12 +800,25 @@ export default {
         }
       }
     },
-    CloudSave(){
-      saveFileData()
-      this.$store.commit('system/resetcloudAutosaveTimer');
+    async CloudSave(){
+      console.log("CloudSave started, isSaving:", this.isSaving);
+      if (this.isSaving) {
+        return; 
+      }
+      this.isSaving = true;
+      try {
+        await saveFileData();
+      } finally {
+        this.isSaving = false;
+        this.$store.commit('system/resetcloudAutosaveTimer');
+        console.log("CloudSave finished, isSaving:", this.isSaving);
+
+      }
+
     },
     CloudLoadLatest(){
       loadLatestFileData()
+      this.showCloudLoadConfirm = false;
     },
     async CloudLoadList() {
       try {
