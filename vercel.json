@@ -1,0 +1,14 @@
+{
+    "rewrites": [
+      {
+        "source": "/gooboo/(.*)",
+        "destination": "/$1"
+      },
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
