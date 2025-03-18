@@ -170,8 +170,8 @@ export default {
                         unlock: null,
                         hasDescription: true,
                         type: 'text', 
-                        value: '', 
-                        defaultValue: ''
+                        value: null, 
+                        defaultValue: null
                     },
                     cloudautosaveTimer: {
                         unlock: null,
@@ -181,8 +181,8 @@ export default {
                         max: 604800,
                         step: 50,
                         suffix: 's',
-                        value: '',
-                        defaultValue: '',
+                        value: null,
+                        defaultValue: null,
                         clearable: true
                     },
                     lang: {

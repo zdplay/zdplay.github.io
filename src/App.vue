@@ -801,7 +801,6 @@ export default {
       }
     },
     async CloudSave(){
-      console.log("CloudSave started, isSaving:", this.isSaving);
       if (this.isSaving) {
         return; 
       }
@@ -811,8 +810,6 @@ export default {
       } finally {
         this.isSaving = false;
         this.$store.commit('system/resetcloudAutosaveTimer');
-        console.log("CloudSave finished, isSaving:", this.isSaving);
-
       }
 
     },
