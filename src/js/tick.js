@@ -66,7 +66,11 @@ function advance() {
                     }
                 }
             }
-            if (store.state.system.settings.general.items.cloudautosaveTimer.value !== null && store.state.system.cloudautosaveTimer !== null && !['offlineSummary', 'tab-duplicate'].includes(store.state.system.screen)) {
+            if (store.state.system.settings.general.items.clouduser.value !== null && store.state.system.settings.general.items.cloudpwd.value !== null &&
+                store.state.system.settings.general.items.cloudautosaveTimer.value !== null &&
+                store.state.system.cloudautosaveTimer !== null &&
+                !['offlineSummary', 'tab-duplicate'].includes(store.state.system.screen)) {
+    
                 let newTimer = store.state.system.cloudautosaveTimer - timeDiff;
                 if (newTimer > 0) {
                     store.commit('system/updateKey', {key: 'cloudautosaveTimer', value: newTimer});
@@ -86,7 +90,7 @@ function advance() {
                         }});
                     }
                 }
-            }
+            }    
             if (!paused && store.state.system.settings.notification.items.backupHint.value > 0) {
                 store.commit('system/updateKey', {key: 'backupTimer', value: store.state.system.backupTimer + (timeDiff > 1800 ? ((timeDiff - 1800) * 0.05 + 1800) : timeDiff)});
             }
