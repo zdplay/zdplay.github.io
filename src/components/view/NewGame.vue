@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="custom-dialog-actions">
-            <v-btn color="primary" @click="loadCloudSave" elevation="2" rounded>{{ $vuetify.lang.t('$vuetify.gooboo.confirm') }}</v-btn>
+            <v-btn color="primary" :disabled="isLoggingIn" @click="loadCloudSave" elevation="2" rounded>{{ $vuetify.lang.t('$vuetify.gooboo.confirm') }}</v-btn>
             <v-btn color="grey lighten-1" @click="loginDialog = false" elevation="2" rounded>{{ $vuetify.lang.t('$vuetify.gooboo.cancel') }}</v-btn>
           </div>
         </div>
@@ -65,6 +65,7 @@ export default {
       username: '',
       password: '',
       languageList: ['zh', 'en', 'de'],
+      isLoggingIn: false,
       currentLangIndex: 0
     }
   },
@@ -108,10 +109,16 @@ export default {
       this.$store.dispatch('system/updateSetting', {category: 'general', name: 'lang', value: newLang});
     },
     async loadCloudSave() {
+      if (this.isLoggingIn) {
+        return;
+      }
+      this.isLoggingIn = true;
       try {
         await loadLatestFileData(this.username, this.password);
       } catch (error) {
         console.error('loadClouderror:', error);
+      } finally {
+        this.isLoggingIn = false;
       }
     }
   }
