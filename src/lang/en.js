@@ -72,6 +72,7 @@ export default {
     delete: 'Delete',
     convert: 'Convert',
     add: 'Add',
+    cloudlogin: 'cloudlogin',
     playedBefore: {
       0: 'Already played before? Load your savefile ',
       1: 'here'

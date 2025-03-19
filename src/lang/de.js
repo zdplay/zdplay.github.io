@@ -72,6 +72,7 @@ export default {
     delete: 'Löschen',
     convert: 'Umwandeln',
     add: 'Hinzufügen',
+    cloudlogin: 'cloudlogin',
     playedBefore: {
       0: 'Schon mal gespielt? Lade deinen Spielstand ',
       1: 'hier'

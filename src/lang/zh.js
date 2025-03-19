@@ -13,7 +13,7 @@ import tag from './zh/tag'
 
 export default {
   ...zh,
-
+  badge: '徽章',
   gooboo: {
     buy: '购买',
     craft: '制作',
@@ -72,6 +72,7 @@ export default {
     delete: '删除',
     convert: '转换',
     add: '增加',
+    cloudlogin: '云登录',
     playedBefore: {
       0: '以前玩过吗？ 加载你的保存文件 ',
       1: '这里'

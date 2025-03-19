@@ -62,6 +62,7 @@ function checkLocal() {
 }
 
 function saveLocal() {
+    console.log(store);
     localStorage.setItem(LOCAL_STORAGE_NAME, getSavefile());
 }
 
@@ -77,8 +78,8 @@ const saveFileData = async () => {
         let tokenId = store.state.system.settings.general.items.cloudpwd.value;
 
         if (!userId || !tokenId) {
-            console.error("clouduser 或 cloudpwd 设置错误");
-            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: "clouduser 或 cloudpwd 设置错误" } });
+            console.error("clouduser or cloudpwd error");
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: "clouduser or cloudpwd error" } });
             isSaving = false;
             return; 
         }
@@ -98,28 +99,43 @@ const saveFileData = async () => {
 
 };
 
-const loadLatestFileData = async () => {
+const loadLatestFileData = async (userId = null, tokenId = null) => {
     try {
-        let userId = store.state.system.settings.general.items.clouduser.value;
-        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+        const effectiveUserId = userId !== null ? userId : store.state.system.settings.general.items.clouduser.value;
+        const effectiveTokenId = tokenId !== null ? tokenId : store.state.system.settings.general.items.cloudpwd.value;
 
-        if (!userId || !tokenId) {
-            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser 或 cloudpwd 设置错误' } });
+        if (!effectiveUserId || !effectiveTokenId) {
+            store.commit('system/addNotification', { 
+                color: 'error', 
+                timeout: 5000, 
+                message: { type: 'load', name: 'cloud', error: 'clouduser or cloudpwd error' } 
+            });
             return;
         }
 
-        const res = await getLatestData(userId, tokenId);
+        const res = await getLatestData(effectiveUserId, effectiveTokenId);
         console.log('saveFileData res:', res.save_data);
         if (res.save_data) {
             cleanStore();
             loadGame(res.save_data);
-            store.commit('system/addNotification', { color: 'success', timeout: 2000, message: { type: 'load', name: 'cloud' } });
+            store.commit('system/addNotification', { 
+                color: 'success', 
+                timeout: 2000, 
+                message: { type: 'load', name: 'cloud' } 
+            });
         } else {
-            store.commit('system/addNotification', { color: 'warning', timeout: 5000, message: { type: 'load', name: 'cloud', error: '没有找到云端存档' } });
+            store.commit('system/addNotification', { 
+                color: 'warning', 
+                timeout: 5000, 
+                message: { type: 'load', name: 'cloud', error: 'No cloud save found' } 
+            });
         }
     } catch (error) {
-        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error.data.message
-        } });
+        store.commit('system/addNotification', { 
+            color: 'error', 
+            timeout: 5000, 
+            message: { type: 'load', name: 'cloud', error: error.data?.message || 'Failed to load cloud save' } 
+        });
     }
 };
 
@@ -129,7 +145,7 @@ const getCloudSaveFileList = async () => {
         let tokenId = store.state.system.settings.general.items.cloudpwd.value;
 
         if (!userId || !tokenId) {
-            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser 或 cloudpwd 设置错误' } });
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser or cloudpwd error' } });
             return null;
         }
         const saveFiles = await getLatestDataList(userId, tokenId, 5);
@@ -147,7 +163,7 @@ const loadSelectedFileData = async (selectedSavefile) => {
         let tokenId = store.state.system.settings.general.items.cloudpwd.value;
 
         if (!userId || !tokenId) {
-            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser 或 cloudpwd 设置错误' } });
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser or cloudpwd error' } });
             return;
         }
 
@@ -158,7 +174,7 @@ const loadSelectedFileData = async (selectedSavefile) => {
             loadGame(res.save_data);
             store.commit('system/addNotification', { color: 'success', timeout: 2000, message: { type: 'load', name: 'cloud' } });
         } else {
-            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: '加载选定存档失败' } });
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'Failed to load cloud save' } });
         }
     } catch (error) {
         store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error.data.message } });
