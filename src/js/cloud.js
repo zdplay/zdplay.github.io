@@ -115,7 +115,6 @@ export function saveData(save_data, userId, tokenId) {
         game_id: gameId,
         save_data: save_data
     };
-    console.log(data)
     return instance({
         url: '/save.php',
         method: 'post',

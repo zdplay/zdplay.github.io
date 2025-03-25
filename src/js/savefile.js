@@ -62,7 +62,7 @@ function checkLocal() {
 }
 
 function saveLocal() {
-    console.log(store);
+    //console.log(store);
     localStorage.setItem(LOCAL_STORAGE_NAME, getSavefile());
 }
 
@@ -114,7 +114,7 @@ const loadLatestFileData = async (userId = null, tokenId = null) => {
         }
 
         const res = await getLatestData(effectiveUserId, effectiveTokenId);
-        console.log('saveFileData res:', res.save_data);
+        //console.log('saveFileData res:', res.save_data);
         if (res.save_data) {
             cleanStore();
             loadGame(res.save_data);
